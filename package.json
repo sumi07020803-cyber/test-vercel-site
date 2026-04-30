@@ -1,0 +1,14 @@
+{
+  "name": "test-vercel-site",
+  "version": "1.0.0",
+  "description": "Simple Vercel deployment test",
+  "main": "index.html",
+  "scripts": {
+    "dev": "echo 'No dev server needed for static site'",
+    "build": "echo 'Static site - no build needed'",
+    "start": "echo 'Static site served by Vercel'"
+  },
+  "keywords": ["test", "vercel", "deployment"],
+  "author": "test-user",
+  "license": "MIT"
+}
