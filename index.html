@@ -1,163 +1,221 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>心情AI小助手 · 温柔陪伴</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: "Microsoft YaHei", sans-serif;
-      background: linear-gradient(120deg, #e8f4f8, #fef6f9);
-      min-height: 100vh;
-      padding: 60px 20px;
-    }
-
-    /* 1440px 宽屏 */
-    .container {
-      width: 1440px;
-      margin: 0 auto;
-    }
-
-    .title {
-      text-align: center;
-      font-size: 36px;
-      color: #5a8ca8;
-      margin-bottom: 40px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.9);
-      border-radius: 24px;
-      padding: 50px 60px;
-      box-shadow: 0 10px 40px rgba(90,140,168,0.15);
-    }
-
-    .chat-box {
-      margin-bottom: 30px;
-    }
-
-    label {
-      font-size: 18px;
-      color: #667885;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    #moodInput {
-      width: 100%;
-      height: 130px;
-      border: 1px solid #d8e6ee;
-      border-radius: 16px;
-      padding: 20px;
-      font-size: 16px;
-      background: #fafcfe;
-      outline: none;
-    }
-
-    #sendBtn {
-      padding: 14px 36px;
-      background: #87b8d8;
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      font-size: 17px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #sendBtn:hover {
-      background: #69a2c7;
-    }
-
-    /* AI 回复区域 */
-    .answer-box {
-      margin-top: 35px;
-      padding: 25px;
-      background: #f5f9fc;
-      border-radius: 18px;
-      border-left: 5px solid #87b8d8;
-    }
-
-    .answer-title {
-      font-size: 16px;
-      color: #7a8fa0;
-      margin-bottom: 10px;
-    }
-
-    #aiAnswer {
-      font-size: 18px;
-      color: #4a6577;
-      line-height: 1.8;
-    }
-
-    /* 小于1440px自动适配 */
-    @media (max-width: 1440px) {
-      .container { width: 100%; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心情小助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1440px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .input-group {
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            max-width: 800px;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        textarea:focus {
+            border-color: #68d391;
+        }
+        button {
+            background: linear-gradient(135deg, #68d391, #48bb78);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border-left: 5px solid #68d391;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .output h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        .output p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #68d391;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            textarea {
+                height: 100px;
+            }
+            button {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <h2 class="title">💬 AI 心情陪伴助手</h2>
-
-    <div class="card">
-      <div class="chat-box">
-        <label>告诉我你今天的心情：</label>
-        <textarea id="moodInput" placeholder="例如：我今天有点难过、我很开心、我有点焦虑…"></textarea>
-      </div>
-
-      <button id="sendBtn" onclick="askAI()">发送给AI分析</button>
-
-      <div class="answer-box">
-        <div class="answer-title">🧩 AI 分析结果：</div>
-        <div id="aiAnswer">请输入你的心情，AI会为你分析～</div>
-      </div>
+    <div class="container">
+        <h1>🌸 心情小助手</h1>
+        <div class="input-group">
+            <textarea id="moodInput" placeholder="请分享你当下的心情、情绪或心事..."></textarea>
+            <br>
+            <button id="analyzeBtn" onclick="analyzeMood()">开始分析</button>
+        </div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>AI正在温柔地分析你的心情...</p>
+        </div>
+        <div class="output" id="output" style="display: none;">
+            <h3>💕 AI的陪伴</h3>
+            <p id="responseText"></p>
+        </div>
+        <div class="error" id="error" style="display: none;">
+            <p id="errorText"></p>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // 核心：调用免费AI接口分析心情
-    async function askAI() {
-      const text = document.getElementById("moodInput").value.trim();
-      const aiAnswer = document.getElementById("aiAnswer");
+    <script>
+        async function analyzeMood() {
+            const input = document.getElementById('moodInput').value.trim();
+            if (!input) {
+                showError('请先输入你的心情哦~');
+                return;
+            }
 
-      if (!text) {
-        aiAnswer.innerText = "请先输入你的心情哦～";
-        return;
-      }
+            const btn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            const output = document.getElementById('output');
+            const error = document.getElementById('error');
 
-      aiAnswer.innerText = "AI正在思考中...";
+            btn.disabled = true;
+            loading.style.display = 'block';
+            output.style.display = 'none';
+            error.style.display = 'none';
 
-      try {
-        const response = await fetch("https://api.aifree.site/v1/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "system",
-                content: "你是一个温柔的心情陪伴AI，用户告诉你心情，你要温柔分析原因，并给予安慰和鼓励，语气温暖、简短、治愈。"
-              },
-              { role: "user", content: text }
-            ]
-          })
-        });
+            try {
+                const response = await fetch('https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        inputs: {
+                            past_user_inputs: [],
+                            generated_responses: [],
+                            text: `用户的心情：${input}。请作为温柔的AI助手，分析用户的情绪原因，提供安慰和陪伴。`
+                        },
+                        parameters: {
+                            max_length: 200,
+                            temperature: 0.7,
+                            do_sample: true
+                        }
+                    })
+                });
 
-        const data = await response.json();
-        aiAnswer.innerText = data.choices[0].message.content;
+                if (!response.ok) {
+                    throw new Error('AI服务暂时不可用，请稍后再试');
+                }
 
-      } catch (err) {
-        aiAnswer.innerText = "AI暂时休息啦，你可以再试一次～";
-      }
-    }
-  </script>
+                const data = await response.json();
+                const aiResponse = data.generated_text || data[0]?.generated_text || '抱歉，我现在有点迷糊，但请记住，你并不孤单。';
+
+                document.getElementById('responseText').textContent = aiResponse;
+                output.style.display = 'block';
+            } catch (err) {
+                showError('连接AI服务失败了，但请相信，一切都会好起来的。错误：' + err.message);
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const error = document.getElementById('error');
+            document.getElementById('errorText').textContent = message;
+            error.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
