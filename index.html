@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Vercel</title>
+  <meta charset="utf-8">
+  <title>可交互页面</title>
+  <style>
+    /* 这里是样式，可选 */
+    body { text-align: center; margin-top: 50px; }
+    button { padding: 10px 20px; font-size: 18px; }
+  </style>
 </head>
 <body>
-    <h1>Hello Vercel!</h1>
+  <h1>我是可交互页面</h1>
+  <button onclick="sayHi()">点我！</button>
+
+  <script>
+    // 这里是 JS 交互逻辑
+    function sayHi() {
+      alert("你成功点击了按钮！页面可交互啦！");
+    }
+  </script>
 </body>
 </html>
